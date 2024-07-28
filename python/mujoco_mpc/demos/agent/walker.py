@@ -28,7 +28,7 @@ from mujoco_mpc import agent as agent_lib
 # model
 model_path = (
     pathlib.Path(__file__).parent.parent.parent
-    / "../../build/mjpc/tasks/cartpole/task.xml"
+    / "../../build/mjpc/tasks/walker/task.xml"
 )
 model = mujoco.MjModel.from_xml_path(str(model_path))
 
@@ -40,14 +40,14 @@ renderer = mujoco.Renderer(model)
 
 # %%
 # agent
-agent = agent_lib.Agent(task_id="Cartpole", model=model)
+agent = agent_lib.Agent(task_id="Walker", model=model)
 
 # weights
-agent.set_cost_weights({"Velocity": 0.15})
+agent.set_cost_weights({"Speed": 0.15}) # Control, Height, Rotation, Speed
 print("Cost weights:", agent.get_cost_weights())
 
 # parameters
-agent.set_task_parameter("Goal", -1.0)
+agent.set_task_parameter("Height Goal", -1.0) # Height Goal, Speed Goal
 print("Parameters:", agent.get_task_parameters())
 
 # %%
@@ -82,13 +82,13 @@ for t in range(T - 1):
 
   # set planner state
   agent.set_state(
-      time=data.time,
-      qpos=data.qpos,
-      qvel=data.qvel,
-      act=data.act,
-      mocap_pos=data.mocap_pos,
-      mocap_quat=data.mocap_quat,
-      userdata=data.userdata,
+      time=data.time, # time
+      qpos=data.qpos, # position
+      qvel=data.qvel, # velocity
+      act=data.act, # control
+      mocap_pos=data.mocap_pos, # mocap position
+      mocap_quat=data.mocap_quat, # mocap quaternion
+      userdata=data.userdata, # user data
   )
 
   # run planner for num_steps
