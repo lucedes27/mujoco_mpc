@@ -72,6 +72,18 @@ qpos[:, 0] = data.qpos
 qvel[:, 0] = data.qvel
 time[0] = data.time
 
+# Print initial state
+print("Initial state:")
+print("qpos: ", data.qpos)
+print("qvel: ", data.qvel)
+print("time: ", data.time)
+
+# Print total number of states
+print("nq: ", model.nq)
+print("nv: ", model.nv)
+print("nu: ", model.nu)
+print("na: ", model.na)
+
 # frames
 frames = []
 FPS = 1.0 / model.opt.timestep
