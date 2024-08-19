@@ -13,6 +13,7 @@
 # limitations under the License.
 
 # %%
+import time
 import matplotlib.pyplot as plt
 import mediapy as media
 import mujoco
@@ -59,6 +60,8 @@ qpos = np.zeros((model.nq, T))
 qvel = np.zeros((model.nv, T))
 ctrl = np.zeros((model.nu, T - 1))
 time = np.zeros(T)
+time_traj = np.zeros(T)
+timestep_durations = np.zeros(T - 1)  # Array to store the duration of each timestep
 
 # costs
 cost_total = np.zeros(T - 1)
@@ -71,6 +74,7 @@ mujoco.mj_resetData(model, data)
 qpos[:, 0] = data.qpos
 qvel[:, 0] = data.qvel
 time[0] = data.time
+time_traj[0] = data.time
 
 # Print initial state
 print("Initial state:")
@@ -91,6 +95,7 @@ FPS = 1.0 / model.opt.timestep
 # simulate
 for t in range(T - 1):
   print("t = ", t)
+  start_time = time.time()
 
   # set planner state
   agent.set_state(
@@ -124,13 +129,18 @@ for t in range(T - 1):
   qpos[:, t + 1] = data.qpos
   qvel[:, t + 1] = data.qvel
   time[t + 1] = data.time
+  time_traj[t + 1] = data.time
 
   # render and save frames
   renderer.update_scene(data)
   pixels = renderer.render()
   frames.append(pixels)
 
+  # Store the duration of the timestep
+  timestep_durations[t] = time.time() - start_time
+
 # reset
+print("Resetting agent...")
 agent.reset()
 
 # display video
@@ -144,6 +154,8 @@ fig = plt.figure()
 
 plt.plot(time, qpos[0, :], label="q0", color="blue")
 plt.plot(time, qpos[1, :], label="q1", color="orange")
+plt.plot(time_traj, qpos[0, :], label="q0", color="blue")
+plt.plot(time_traj, qpos[1, :], label="q1", color="orange")
 
 plt.legend()
 plt.xlabel("Time (s)")
@@ -155,6 +167,8 @@ fig = plt.figure()
 
 plt.plot(time, qvel[0, :], label="v0", color="blue")
 plt.plot(time, qvel[1, :], label="v1", color="orange")
+plt.plot(time_traj, qvel[0, :], label="v0", color="blue")
+plt.plot(time_traj, qvel[1, :], label="v1", color="orange")
 
 plt.legend()
 plt.xlabel("Time (s)")
@@ -175,11 +189,26 @@ fig = plt.figure()
 
 for i, c in enumerate(agent.get_cost_term_values().items()):
   plt.plot(time[:-1], cost_terms[i, :], label=c[0])
+  plt.plot(time_traj[:-1], cost_terms[i, :], label=c[0])
 
 plt.plot(time[:-1], cost_total, label="Total (weighted)", color="black")
+plt.plot(time_traj[:-1], cost_total, label="Total (weighted)", color="black")
 
 plt.legend()
 plt.xlabel("Time (s)")
 plt.ylabel("Costs")
+
+plt.show()
+
+# %%
+# Plot timestep durations along with the average timestep duration
+fig = plt.figure()
+
+plt.plot(timestep_durations[:-1], label="Timestep durations")
+plt.axhline(np.mean(timestep_durations[:-1]), color="red", label="Average timestep duration")
+
+plt.legend()
+plt.xlabel("Timestep")
+plt.ylabel("Duration (s)")
 
 plt.show()
