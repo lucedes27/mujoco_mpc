@@ -42,17 +42,17 @@ void Walker::ResidualFn::Residual(const mjModel* model, const mjData* data,
   mju_copy(&residual[counter], data->ctrl, model->nu);
   counter += model->nu;
 
-  // ---------- Residual (1) -----------
-  double height = SensorByName(model, data, "torso_position")[2];
-  residual[counter++] = height - parameters_[0];
+  // // ---------- Residual (1) -----------
+  // double height = SensorByName(model, data, "torso_position")[2];
+  // residual[counter++] = height - parameters_[0];
 
-  // ---------- Residual (2) ----------
-  double torso_up = SensorByName(model, data, "torso_zaxis")[2];
-  residual[counter++] = torso_up - 1.0;
+  // // ---------- Residual (2) ----------
+  // double torso_up = SensorByName(model, data, "torso_zaxis")[2];
+  // residual[counter++] = torso_up - 1.0;
 
   // ---------- Residual (3) ----------
   double com_vel = SensorByName(model, data, "torso_subtreelinvel")[0];
-  residual[counter++] = com_vel - parameters_[1];
+  residual[counter++] = -com_vel;
 
   // sensor dim sanity check
   // TODO: use this pattern everywhere and make this a utility function
@@ -64,7 +64,7 @@ void Walker::ResidualFn::Residual(const mjModel* model, const mjData* data,
   }
   if (user_sensor_dim != counter) {
     mju_error_i("mismatch between total user-sensor dimension "
-                "and actual length of residual %d", counter);
+                "and actual length of residual %d. ", counter);
   }
 }
 }  // namespace mjpc

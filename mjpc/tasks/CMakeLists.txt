@@ -55,11 +55,12 @@ add_custom_target(
           <${CMAKE_CURRENT_SOURCE_DIR}/swimmer/swimmer.xml.patch
   # walker
   COMMAND ${CMAKE_COMMAND} -E copy
-          ${dm_control_SOURCE_DIR}/dm_control/suite/walker.xml
+          # ${dm_control_SOURCE_DIR}/dm_control/suite/walker.xml
+          ${CMAKE_CURRENT_SOURCE_DIR}/walker/walker.xml
           ${CMAKE_CURRENT_BINARY_DIR}/walker/walker.xml
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/walker/walker_modified.xml
-          ${CMAKE_CURRENT_BINARY_DIR}/walker/walker.xml
-          <${CMAKE_CURRENT_SOURCE_DIR}/walker/walker.xml.patch
+ # COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/walker/walker_modified.xml
+ #         ${CMAKE_CURRENT_BINARY_DIR}/walker/walker.xml
+   #       <${CMAKE_CURRENT_SOURCE_DIR}/walker/walker.xml.patch
 
   ## Menagerie models
   COMMAND ${CMAKE_COMMAND} -E copy
