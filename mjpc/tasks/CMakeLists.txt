@@ -22,35 +22,35 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E copy
           ${dm_control_SOURCE_DIR}/dm_control/suite/acrobot.xml
           ${CMAKE_CURRENT_BINARY_DIR}/acrobot/acrobot.xml
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/acrobot/acrobot_modified.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/acrobot/acrobot_modified.xml
           ${CMAKE_CURRENT_BINARY_DIR}/acrobot/acrobot.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/acrobot/acrobot.xml.patch
   # cartpole
   COMMAND ${CMAKE_COMMAND} -E copy
           ${dm_control_SOURCE_DIR}/dm_control/suite/cartpole.xml
           ${CMAKE_CURRENT_BINARY_DIR}/cartpole/cartpole.xml
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/cartpole/cartpole_modified.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/cartpole/cartpole_modified.xml
           ${CMAKE_CURRENT_BINARY_DIR}/cartpole/cartpole.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/cartpole/cartpole.xml.patch
   # humanoid
   COMMAND ${CMAKE_COMMAND} -E copy
           ${dm_control_SOURCE_DIR}/dm_control/suite/humanoid.xml
           ${CMAKE_CURRENT_BINARY_DIR}/humanoid/humanoid.xml
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/humanoid/humanoid_modified.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/humanoid/humanoid_modified.xml
           ${CMAKE_CURRENT_BINARY_DIR}/humanoid/humanoid.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/humanoid/humanoid.xml.patch
   # particle
   COMMAND ${CMAKE_COMMAND} -E copy
           ${dm_control_SOURCE_DIR}/dm_control/suite/point_mass.xml
           ${CMAKE_CURRENT_BINARY_DIR}/particle/particle.xml
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/particle/particle_modified.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/particle/particle_modified.xml
           ${CMAKE_CURRENT_BINARY_DIR}/particle/particle.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/particle/particle.xml.patch
   # swimmer
   COMMAND ${CMAKE_COMMAND} -E copy
           ${dm_control_SOURCE_DIR}/dm_control/suite/swimmer.xml
           ${CMAKE_CURRENT_BINARY_DIR}/swimmer/swimmer.xml
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/swimmer/swimmer_modified.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/swimmer/swimmer_modified.xml
           ${CMAKE_CURRENT_BINARY_DIR}/swimmer/swimmer.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/swimmer/swimmer.xml.patch
   # walker
@@ -76,7 +76,7 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E copy_directory
           ${menagerie_SOURCE_DIR}/wonik_allegro/assets
           ${CMAKE_CURRENT_BINARY_DIR}/allegro/assets
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/allegro/right_hand_modified.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/allegro/right_hand_modified.xml
           ${CMAKE_CURRENT_BINARY_DIR}/allegro/right_hand.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/allegro/right_hand.xml.patch
 
@@ -86,7 +86,7 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E copy_directory
           ${menagerie_SOURCE_DIR}/franka_emika_panda/assets
           ${CMAKE_CURRENT_BINARY_DIR}/panda/assets
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/panda/panda_modified.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/panda/panda_modified.xml
           ${CMAKE_CURRENT_BINARY_DIR}/panda/panda.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/panda/panda.xml.patch
 
@@ -96,7 +96,7 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E copy_directory
           ${menagerie_SOURCE_DIR}/unitree_a1/assets
           ${CMAKE_CURRENT_BINARY_DIR}/quadruped/assets
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/quadruped/a1_modified.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/quadruped/a1_modified.xml
           ${CMAKE_CURRENT_BINARY_DIR}/quadruped/a1.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/quadruped/a1.xml.patch
 
@@ -113,13 +113,13 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E copy_directory
           ${menagerie_SOURCE_DIR}/skydio_x2/assets
           ${CMAKE_CURRENT_BINARY_DIR}/quadrotor/assets
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/quadrotor/quadrotor_modified.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/quadrotor/quadrotor_modified.xml
           ${CMAKE_CURRENT_BINARY_DIR}/quadrotor/quadrotor.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/quadrotor/quadrotor.xml.patch
 
   ## Cube reorientation
   # patch cube from common assets
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/common_assets/cube_modified_shadow_reorient.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/common_assets/cube_modified_shadow_reorient.xml
           ${CMAKE_CURRENT_BINARY_DIR}/common_assets/reorientation_cube.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/common_assets/cube.xml.patch
 
@@ -133,11 +133,11 @@ add_custom_target(
           ${mujoco_SOURCE_DIR}/model/cube/assets
           ${CMAKE_CURRENT_BINARY_DIR}/rubik/assets
   # modified cube model for task
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/rubik/cube_3x3x3_modified.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/rubik/cube_3x3x3_modified.xml
           ${CMAKE_CURRENT_BINARY_DIR}/rubik/cube_3x3x3.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/rubik/cube_3x3x3.xml.patch
   # modified cube model to transition model for scramble mode
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/rubik/transition_model.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/rubik/transition_model.xml
           ${CMAKE_CURRENT_BINARY_DIR}/rubik/cube_3x3x3.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/rubik/transition_model.xml.patch
   # copy hand model from Menagerie
@@ -159,7 +159,7 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E copy
           ${menagerie_SOURCE_DIR}/aloha/filtered_cartesian_actuators.xml
           ${CMAKE_CURRENT_BINARY_DIR}/bimanual/filtered_cartesian_actuators.xml
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/bimanual/aloha_cartesian.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/bimanual/aloha_cartesian.xml
           ${CMAKE_CURRENT_BINARY_DIR}/bimanual/aloha.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/bimanual/aloha.patch
 
@@ -167,7 +167,7 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E copy
           ${menagerie_SOURCE_DIR}/aloha/mjx_aloha.patch
           ${CMAKE_CURRENT_BINARY_DIR}/bimanual/mjx_aloha.patch
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/bimanual/mjx_aloha.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/bimanual/mjx_aloha.xml
           ${CMAKE_CURRENT_BINARY_DIR}/bimanual/aloha.xml
           <${CMAKE_CURRENT_BINARY_DIR}/bimanual/mjx_aloha.patch
   COMMAND ${CMAKE_COMMAND} -E copy
@@ -176,14 +176,14 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E copy
           ${menagerie_SOURCE_DIR}/aloha/mjx_scene.patch
           ${CMAKE_CURRENT_BINARY_DIR}/bimanual/mjx_scene.patch
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/bimanual/mjx_scene.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/bimanual/mjx_scene.xml
           ${CMAKE_CURRENT_BINARY_DIR}/bimanual/scene.xml
           <${CMAKE_CURRENT_BINARY_DIR}/bimanual/mjx_scene.patch
 
   COMMAND ${CMAKE_COMMAND} -E copy
           ${menagerie_SOURCE_DIR}/aloha/mjx_filtered_cartesian_actuators.patch
           ${CMAKE_CURRENT_BINARY_DIR}/bimanual/mjx_filtered_cartesian_actuators.patch
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/bimanual/mjx_filtered_cartesian_actuators.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/bimanual/mjx_filtered_cartesian_actuators.xml
           ${CMAKE_CURRENT_BINARY_DIR}/bimanual/filtered_cartesian_actuators.xml
           <${CMAKE_CURRENT_BINARY_DIR}/bimanual/mjx_filtered_cartesian_actuators.patch
 
@@ -193,7 +193,7 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E copy_directory
           ${menagerie_SOURCE_DIR}/robotis_op3/assets
           ${CMAKE_CURRENT_BINARY_DIR}/op3/assets
-  COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/op3/op3_modified.xml
+  COMMAND patch -l -o ${CMAKE_CURRENT_BINARY_DIR}/op3/op3_modified.xml
           ${CMAKE_CURRENT_BINARY_DIR}/op3/op3.xml
           <${CMAKE_CURRENT_SOURCE_DIR}/op3/op3.xml.patch
 

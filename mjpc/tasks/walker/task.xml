@@ -7,14 +7,14 @@
 
   <custom>
     <!-- agent -->
-    <numeric name="agent_planner" data="2" />
+    <numeric name="agent_planner" data="0" />
     <numeric name="agent_horizon" data="0.8" />
-    <numeric name="agent_timestep" data="0.01" />
+    <numeric name="agent_timestep" data="0.04" />
     <numeric name="sampling_spline_points" data="3" />
     <numeric name="sampling_exploration" data="0.5" />
     <numeric name="gradient_spline_points" data="5" />
-    <numeric name="residual_Height Goal" data="1.2 0.5 1.2" />
-    <numeric name="residual_Speed Goal" data="0 -5.0 5.0" />
+    <!-- <numeric name="residual_Height Goal" data="2.5 0.5 3" /> -->
+    <numeric name="residual_Speed Goal" data="3.0 -5.0 5.0" />
 
     <!-- estimator -->
     <numeric name="estimator" data="0" />
@@ -27,10 +27,10 @@
 
   <sensor>
     <!-- cost -->
-    <user name="Control" dim="6" user="0 0.001 0.0 1.0" />
-    <!-- <user name="Height" dim="1" user="0 10.0 0.0 10.0" />
-    <user name="Rotation" dim="1" user="0 3.0 0.0 5.0" /> -->
-    <user name="Speed" dim="1" user="-1 1.0 0.0 1.0" />
+    <user name="Control" dim="6" user="0 0.1 0.0 1.0" />
+    <user name="Height" dim="1" user="0 10.0 0.0 10.0" />
+    <user name="Rotation" dim="1" user="0 3.0 0.0 5.0" />
+    <user name="Speed" dim="1" user="0 1.0 0.0 1.0" />
 
     <!-- estimator -->
     <jointpos name="rootz" joint="rootz" />
