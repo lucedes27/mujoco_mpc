@@ -41,7 +41,7 @@
 #include "mjpc/tasks/swimmer/swimmer.h"
 #include "mjpc/tasks/walker/walker.h"
 #include "mjpc/tasks/half-cheetah/half_cheetah.h"
-#include "mjpc/tasks/quadrotor/hopper.h"
+#include "mjpc/tasks/hopper/hopper.h"
 
 namespace mjpc {
 
