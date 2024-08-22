@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "mjpc/tasks/half-cheetah/half_cheetah.h"
+#include "mjpc/tasks/hopper/hopper.h"
 
 #include <string>
 
@@ -21,11 +21,13 @@
 #include "mjpc/utilities.h"
 
 namespace mjpc {
-std::string HalfCheetah::XmlPath() const {
-  return GetModelPath("half-cheetah/task.xml");
+std::string Hopper::XmlPath() const {
+  return GetModelPath("hopper/task.xml");
 }
-std::string HalfCheetah::Name() const { return "HalfCheetah"; }
-// --------- Residuals for HalfCheetah task --------
+
+std::string Hopper::Name() const { return "Hopper"; }
+
+// --------- Residuals for Hopper task --------
 //   Number of residuals: 4
 //     Residual (0): control
 //     Residual (1): position_z - height_goal
@@ -35,7 +37,7 @@ std::string HalfCheetah::Name() const { return "HalfCheetah"; }
 //     Parameter (0): height_goal
 //     Parameter (1): speed_goal
 // --------------------------------------------
-void HalfCheetah::ResidualFn::Residual(const mjModel* model, const mjData* data,
+void Hopper::ResidualFn::Residual(const mjModel* model, const mjData* data,
                       double* residual) const {
   int counter = 0;
   // ---------- Residual (0) ----------
