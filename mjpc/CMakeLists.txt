@@ -82,6 +82,8 @@ add_library(
   tasks/swimmer/swimmer.h
   tasks/walker/walker.cc
   tasks/walker/walker.h
+  tasks/half-cheetah/half_cheetah.cc
+  tasks/half-cheetah/half_cheetah.h
   planners/planner.cc
   planners/planner.h
   planners/policy.h

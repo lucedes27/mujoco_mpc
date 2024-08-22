@@ -14,23 +14,23 @@
     <numeric name="sampling_exploration" data="0.5" />
     <numeric name="gradient_spline_points" data="5" />
     <!-- <numeric name="residual_Height Goal" data="2.5 0.5 3" /> -->
-    <numeric name="residual_Speed Goal" data="3.0 -5.0 5.0" />
+    <numeric name="residual_Speed Goal" data="2.0 -5.0 5.0" />
 
     <!-- estimator -->
     <numeric name="estimator" data="0" />
-    <numeric name="estimator_sensor_start" data="4" />
-    <numeric name="estimator_number_sensor" data="9" />
-    <numeric name="estimator_timestep" data="0.005" />
+    <!-- <numeric name="estimator_sensor_start" data="4" /> -->
+    <!-- <numeric name="estimator_number_sensor" data="9" /> -->
+    <!-- <numeric name="estimator_timestep" data="0.005" /> -->
     <numeric name="batch_configuration_length" data="3" />
     <numeric name="batch_scale_prior" data="1.0e-3" />
   </custom>
 
   <sensor>
     <!-- cost -->
-    <user name="Control" dim="6" user="0 0.1 0.0 1.0" />
+    <user name="Control" dim="6" user="0 1.0 0.0 1.0" />
     <!-- <user name="Height" dim="1" user="0 10.0 0.0 10.0" />
     <user name="Rotation" dim="1" user="0 3.0 0.0 5.0" /> -->
-    <user name="Speed" dim="1" user="0 1.0 0.0 1.0" />
+    <user name="Speed" dim="1" user="0 0.1 0.0 1.0" />
 
     <!-- estimator -->
     <jointpos name="rootz" joint="rootz" />

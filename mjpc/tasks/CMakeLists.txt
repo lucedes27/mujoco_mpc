@@ -62,6 +62,11 @@ add_custom_target(
  #         ${CMAKE_CURRENT_BINARY_DIR}/walker/walker.xml
    #       <${CMAKE_CURRENT_SOURCE_DIR}/walker/walker.xml.patch
 
+  # half-cheetah
+  COMMAND ${CMAKE_COMMAND} -E copy
+          ${CMAKE_CURRENT_SOURCE_DIR}/half-cheetah/half_cheetah.xml
+          ${CMAKE_CURRENT_BINARY_DIR}/half-cheetah/half_cheetah.xml
+
   ## Menagerie models
   COMMAND ${CMAKE_COMMAND} -E copy
           ${menagerie_SOURCE_DIR}/shadow_hand/right_hand.xml
