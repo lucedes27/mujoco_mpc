@@ -1,0 +1,6 @@
+services:
+  mujoco_mpc:
+    image: ghcr.io/vishgit1234/hypo/mujoco-mpc
+    command: tail -f /dev/null
+    volumes:
+      - ./:/mujoco_mpc
