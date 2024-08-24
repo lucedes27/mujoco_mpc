@@ -86,63 +86,63 @@ buffer = Buffer(BUFFER_SIZE, [qpos.shape[0] + qvel.shape[0] - 1], [ctrl.shape[0]
 reward_flags = np.ones(100000, dtype=bool)
 max_level = 0
 
-# with launch_passive(model, data) as viewer:
+with launch_passive(model, data) as viewer:
 
-# simulate
-for t in range(T - 1):
-  print("t = ", t)
+  # simulate
+  for t in range(T - 1):
+    print("t = ", t)
 
-  # set planner state
-  agent.set_state(
-      time=data.time, # time
-      qpos=data.qpos, # position
-      qvel=data.qvel, # velocity
-      act=data.act, # control
-      mocap_pos=data.mocap_pos, # mocap position
-      mocap_quat=data.mocap_quat, # mocap quaternion
-      userdata=data.userdata, # user data
-  )
+    # set planner state
+    agent.set_state(
+        time=data.time, # time
+        qpos=data.qpos, # position
+        qvel=data.qvel, # velocity
+        act=data.act, # control
+        mocap_pos=data.mocap_pos, # mocap position
+        mocap_quat=data.mocap_quat, # mocap quaternion
+        userdata=data.userdata, # user data
+    )
 
-  # run planner for num_steps
-  num_steps = 10
-  for _ in range(num_steps):
-    agent.planner_step()
+    # run planner for num_steps
+    num_steps = 10
+    for _ in range(num_steps):
+      agent.planner_step()
 
-  # set ctrl from agent policy
-  data.ctrl = agent.get_action()
-  ctrl[:, t] = data.ctrl
+    # set ctrl from agent policy
+    data.ctrl = agent.get_action()
+    ctrl[:, t] = data.ctrl
 
-  # get costs
-  cost_total[t] = agent.get_total_cost()
-  for i, c in enumerate(agent.get_cost_term_values().items()):
-    cost_terms[i, t] = c[1]
+    # get costs
+    cost_total[t] = agent.get_total_cost()
+    for i, c in enumerate(agent.get_cost_term_values().items()):
+      cost_terms[i, t] = c[1]
 
-  # step
-  mujoco.mj_step(model, data)
+    # step
+    mujoco.mj_step(model, data)
 
-  # cache
-  qpos[:, t + 1] = data.qpos
-  qvel[:, t + 1] = data.qvel
-  time[t + 1] = data.time
+    # cache
+    qpos[:, t + 1] = data.qpos
+    qvel[:, t + 1] = data.qvel
+    time[t + 1] = data.time
 
-  # Compute rewards using RL reward function
-  # new sparse reward
-  sparse_threshold = 2
-  level = int((qpos[0, t + 1] - qpos[0, 0]) / sparse_threshold)
-  if level >= 1 and reward_flags[level]:
-    reward = 1.
-    reward_flags[level] = False
-  else:
-    reward = 0.
-  if level > max_level:
-    max_level = level
-  buffer.append(np.concatenate([qpos[1:, t], qvel[:, t]]), ctrl[:, t], reward, False, np.concatenate([qpos[1:, t + 1], qvel[:, t + 1]]))
+    # Compute rewards using RL reward function
+    # new sparse reward
+    sparse_threshold = 2
+    level = int((qpos[0, t + 1] - qpos[0, 0]) / sparse_threshold)
+    if level >= 1 and reward_flags[level]:
+      reward = 1.
+      reward_flags[level] = False
+    else:
+      reward = 0.
+    if level > max_level:
+      max_level = level
+    buffer.append(np.concatenate([qpos[1:, t], qvel[:, t]]), ctrl[:, t], reward, False, np.concatenate([qpos[1:, t + 1], qvel[:, t + 1]]))
 
   # render and save frames
   # renderer.update_scene(data)
   # pixels = renderer.render()
   # frames.append(pixels)
-    # viewer.sync()
+    viewer.sync()
 
 # save buffer
 buffer.save(os.path.join(
