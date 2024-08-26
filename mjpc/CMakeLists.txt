@@ -84,8 +84,8 @@ add_library(
   tasks/walker/walker.h
   tasks/half-cheetah/half_cheetah.cc
   tasks/half-cheetah/half_cheetah.h
-  tasks/half-cheetah/hopper.cc
-  tasks/half-cheetah/hopper.h
+  tasks/hopper/hopper.cc
+  tasks/hopper/hopper.h
   planners/planner.cc
   planners/planner.h
   planners/policy.h
