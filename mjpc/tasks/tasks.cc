@@ -42,6 +42,7 @@
 #include "mjpc/tasks/walker/walker.h"
 #include "mjpc/tasks/half-cheetah/half_cheetah.h"
 #include "mjpc/tasks/hopper/hopper.h"
+#include "mjpc/tasks/ant/ant.h"
 
 namespace mjpc {
 
@@ -72,7 +73,8 @@ std::vector<std::shared_ptr<Task>> GetTasks() {
       std::make_shared<Swimmer>(),
       std::make_shared<Walker>(),
       std::make_shared<HalfCheetah>(),
-      std::make_shared<Hopper>()
+      std::make_shared<Hopper>(),
+      std::make_shared<Ant>()
   };
 }
 }  // namespace mjpc

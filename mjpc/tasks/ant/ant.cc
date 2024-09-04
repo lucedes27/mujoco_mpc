@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "mjpc/tasks/hopper/hopper.h"
+#include "mjpc/tasks/ant/ant.h"
 
 #include <string>
 
@@ -21,13 +21,11 @@
 #include "mjpc/utilities.h"
 
 namespace mjpc {
-std::string Hopper::XmlPath() const {
-  return GetModelPath("hopper/task.xml");
+std::string Ant::XmlPath() const {
+  return GetModelPath("ant/task.xml");
 }
-
-std::string Hopper::Name() const { return "Hopper"; }
-
-// --------- Residuals for Hopper task --------
+std::string Ant::Name() const { return "Ant"; }
+// --------- Residuals for HalfCheetah task --------
 //   Number of residuals: 4
 //     Residual (0): control
 //     Residual (1): position_z - height_goal
@@ -37,20 +35,20 @@ std::string Hopper::Name() const { return "Hopper"; }
 //     Parameter (0): height_goal
 //     Parameter (1): speed_goal
 // --------------------------------------------
-void Hopper::ResidualFn::Residual(const mjModel* model, const mjData* data,
+void Ant::ResidualFn::Residual(const mjModel* model, const mjData* data,
                       double* residual) const {
   int counter = 0;
   // ---------- Residual (0) ----------
   mju_copy(&residual[counter], data->ctrl, model->nu);
   counter += model->nu;
 
-  // // // // ---------- Residual (1) -----------
-  double height = SensorByName(model, data, "torso_position")[2];
-  residual[counter++] = height < 0.75 ? 3.0 : 0.0;
+  // // ---------- Residual (1) -----------
+  // double height = SensorByName(model, data, "torso_position")[2];
+  // residual[counter++] = height < 0.2 || height > 0.9 ? 5.0 : 0.0;
 
-  // // // ---------- Residual (2) ----------
-  // double torso_up = SensorByName(model, data, "rooty")[0];
-  // residual[counter++] = abs(torso_up) > 0.15 ? 3.0 : 0.0;
+  // // ---------- Residual (2) ----------
+  // double torso_up = SensorByName(model, data, "torso_zaxis")[2];
+  // residual[counter++] = torso_up - 1.0;
 
   // ---------- Residual (3) ----------
   double com_vel = SensorByName(model, data, "torso_subtreelinvel")[0];

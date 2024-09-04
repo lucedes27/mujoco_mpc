@@ -32,7 +32,7 @@ import os
 # model
 model_path = (
     pathlib.Path(__file__).parent.parent.parent
-    / "../../build/mjpc/tasks/half-cheetah/task.xml"
+    / "../../build/mjpc/tasks/ant/task.xml"
 )
 model = mujoco.MjModel.from_xml_path(str(model_path))
 
@@ -44,7 +44,7 @@ data = mujoco.MjData(model)
 
 # %%
 # agent
-agent = agent_lib.Agent(task_id="HalfCheetah", model=model)
+agent = agent_lib.Agent(task_id="Ant", model=model)
 
 # weights
 print("Cost weights:", agent.get_cost_weights())
@@ -54,12 +54,13 @@ print("Parameters:", agent.get_task_parameters())
 
 # %%
 # rollout horizon
-T = 10000
+T = 10001
 
 # trajectories
 qpos = np.zeros((model.nq, T))
 qvel = np.zeros((model.nv, T))
 ctrl = np.zeros((model.nu, T - 1))
+comPosX = np.zeros(T)
 time = np.zeros(T)
 
 # costs
@@ -72,21 +73,30 @@ mujoco.mj_resetData(model, data)
 # cache initial state
 qpos[:, 0] = data.qpos
 qvel[:, 0] = data.qvel
-time[0] = data.time
+
+# get com pos
+mujoco.mj_comPos(model, data)
+comPosX[0] = data.subtree_com[0][0]
 
 # frames
 frames = []
 FPS = 1.0 / model.opt.timestep
 
-# init buffer (the minus 1 is since rootx pos is ignored in gymnasium)
-BUFFER_SIZE=10000 
-buffer = Buffer(BUFFER_SIZE, [qpos.shape[0] + qvel.shape[0] - 1], [ctrl.shape[0]], 'cpu')
+# init buffer (the minus 2 is since root x and root y pos is ignored in gymnasium)
+BUFFER_SIZE=10000
+buffer = Buffer(BUFFER_SIZE, [qpos.shape[0] + qvel.shape[0] - 2], [ctrl.shape[0]], 'cpu')
 
 # for reward stuff
-reward_flags = np.ones(100000, dtype=bool)
-max_level = 0
+# reward_flags = np.ones(100000, dtype=bool)
+# max_level = 0
 
 total_reward = 0
+episode_reward = 0
+terminated = False
+timestep_count = 0
+num_episodes = 0
+
+done_flag = False
 
 # with launch_passive(model, data) as viewer:
 
@@ -125,43 +135,63 @@ for t in range(T - 1):
   # cache
   qpos[:, t + 1] = data.qpos
   qvel[:, t + 1] = data.qvel
-  time[t + 1] = data.time
+  mujoco.mj_comPos(model, data)
+  comPosX[t + 1] = data.subtree_com[0][0]
 
   # Compute dense rewards
-  x_position_before = qpos[0, t]
-  x_position_after = qpos[0, t + 1]
-  x_velocity = (x_position_after - x_position_before) / 0.01
-  ctrl_cost = 0.1 * np.sum(np.square(ctrl[:, t]))
-  forward_reward = x_velocity
-  reward = forward_reward - ctrl_cost
-  total_reward += reward
+  posbefore = comPosX[t]
+  posafter = comPosX[t + 1]
+  alive_bonus = 1.0
+  reward = (posafter - posbefore) / 0.01
+  reward += alive_bonus if not terminated else 0
+  reward -= 0.5 * np.square(ctrl[:, t]).sum()
+  done = (not np.isfinite(np.concatenate([qpos[2:, t + 1], qvel[:, t + 1]])).all()) or (qpos[2, t + 1] < 0.2 or qpos[2, t + 1] > 1.0)
+  episode_reward += reward
+  print("Terminated: ", done)
   print("Dense Reward: ", reward)
+
+  buffer.append(np.concatenate([qpos[2:, t], qvel[:, t]]), ctrl[:, t], reward, done, np.concatenate([qpos[2:, t + 1], qvel[:, t + 1]]))
+
+  if done:
+    num_episodes += 1
+    total_reward += episode_reward
+    mujoco.mj_resetData(model, data)
+    qpos[:, t + 1] = data.qpos
+    qvel[:, t + 1] = data.qvel
+    comPosX[t + 1] = data.subtree_com[0][0]
+    episode_reward = 0
 
   # Compute rewards using RL reward function
   # new sparse reward
-  sparse_threshold = 2
-  level = int((qpos[0, t + 1] - qpos[0, 0]) / sparse_threshold)
-  if level >= 1 and reward_flags[level]:
-    reward = 1.
-    reward_flags[level] = False
-  else:
-    reward = 0.
-  if level > max_level:
-    max_level = level
-  buffer.append(np.concatenate([qpos[1:, t], qvel[:, t]]), ctrl[:, t], reward, False, np.concatenate([qpos[1:, t + 1], qvel[:, t + 1]]))
+  # sparse_threshold = 1
+  # level = int((comPosX[t + 1] - comPosX[0]) / sparse_threshold)
+  # if level >= 1 and reward_flags[level]:
+  #   reward = 1.
+  #   reward_flags[level] = False
+  # else:
+  #   reward = 0.
+  # if level > max_level:
+  #   max_level = level
+  # notdone = np.isfinite(np.concatenate([qpos[:, t + 1], qvel[:, t + 1]])).all() and qpos[2, t + 1] >= 0.2 and qpos[2, t + 1] <= 1.0
+  # done = not notdone
+  # print("Terminated: ", done)
+  # print("x pos: ", qpos[0, t + 1])
+  # buffer.append(np.concatenate([qpos[2:, t], qvel[:, t]]), ctrl[:, t], reward, done, np.concatenate([qpos[2:, t + 1], qvel[:, t + 1]]))
 
+  timestep_count += 1
 # render and save frames
 # renderer.update_scene(data)
 # pixels = renderer.render()
 # frames.append(pixels)
     # viewer.sync()
 
-print("Total Reward:", total_reward)
+print("Episodic Reward:", total_reward / num_episodes if num_episodes != 0 else episode_reward)
+print("Num Episodes: ", num_episodes)
 
 # save buffer
 buffer.save(os.path.join(
   'buffers',
-  'half-cheetah.pth'
+  'ant.pth'
 ))
 
 # reset

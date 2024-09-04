@@ -43,12 +43,12 @@ void Walker::ResidualFn::Residual(const mjModel* model, const mjData* data,
   counter += model->nu;
 
   // // // ---------- Residual (1) -----------
-  // double height = SensorByName(model, data, "torso_position")[2];
-  // residual[counter++] = height - parameters_[0];
+  double height = SensorByName(model, data, "torso_position")[2];
+  residual[counter++] = height - 1.4;
 
   // // // ---------- Residual (2) ----------
-  // double torso_up = SensorByName(model, data, "torso_zaxis")[2];
-  // residual[counter++] = torso_up - 1.0;
+  double torso_up = SensorByName(model, data, "torso_zaxis")[2];
+  residual[counter++] = torso_up - 1.0;
 
   // ---------- Residual (3) ----------
   double com_vel = SensorByName(model, data, "torso_subtreelinvel")[0];

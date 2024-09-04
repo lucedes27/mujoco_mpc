@@ -72,6 +72,11 @@ add_custom_target(
           ${CMAKE_CURRENT_SOURCE_DIR}/hopper/hopper.xml
           ${CMAKE_CURRENT_BINARY_DIR}/hopper/hopper.xml
 
+  # ant
+  COMMAND ${CMAKE_COMMAND} -E copy
+          ${CMAKE_CURRENT_SOURCE_DIR}/ant/ant.xml
+          ${CMAKE_CURRENT_BINARY_DIR}/ant/ant.xml
+
   ## Menagerie models
   COMMAND ${CMAKE_COMMAND} -E copy
           ${menagerie_SOURCE_DIR}/shadow_hand/right_hand.xml
